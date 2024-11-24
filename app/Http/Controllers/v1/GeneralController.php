@@ -21,7 +21,7 @@ use Carbon\Carbon;
 
 class GeneralController extends Controller
 {
-    // This is general controller
+    // This is general controller in the general folder
     // Events
     public function eventTypes()
     {
