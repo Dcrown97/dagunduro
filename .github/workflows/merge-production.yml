@@ -16,4 +16,4 @@ jobs:
         with:
           server: ftp.jkp.mje.mybluehost.me
           username: developer@dagunduro-api.sbscuk.co.uk
-          password: ${{ secrets.password }}
+          password: IK%^=nFD&_vf
