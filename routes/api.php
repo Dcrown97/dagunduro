@@ -48,6 +48,11 @@ Route::group(["prefix" => "v1"], function () {
             Route::post('/register/attendee', [GeneralController::class, 'registerAttendee']);
         });
 
+        Route::group([], function () {
+            Route::apiResource('tests', 'App\Http\Controllers\v1\member\TestController');
+            Route::post('overview', 'App\Http\Controllers\v1\member\TestController@overview');
+        });
+
         // Resources open routes
         Route::group(['prefix' => 'resources'], function () {
             Route::get('/categories', [GeneralController::class, 'resourceCategories']);
