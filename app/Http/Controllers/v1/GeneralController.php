@@ -506,11 +506,7 @@ class GeneralController extends Controller
             return JsonResponser::send(true, $e->getMessage(), null, 500);
         }
     }
-
-    public function test () {
-        return "Hello World";
-    }
-
+    
     // Contact
     public function contact(Request $request)
     {
