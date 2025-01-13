@@ -507,6 +507,10 @@ class GeneralController extends Controller
         }
     }
 
+    public function test () {
+        return "Hello World";
+    }
+
     // Contact
     public function contact(Request $request)
     {
