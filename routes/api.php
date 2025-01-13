@@ -84,6 +84,16 @@ Route::group(["prefix" => "v1"], function () {
         Route::group(['prefix' => 'member'], function () {
             Route::post('/create', [GeneralController::class, 'registerMember']);
         });
+
+        // Contact open routes
+        Route::group(['prefix' => 'contact'], function () {
+            Route::post('/create', [GeneralController::class, 'contact']);
+        });
+
+        // Departments open routes
+        Route::group(['prefix' => 'departments'], function () {
+            Route::get('/', [GeneralController::class, 'departments']);
+        });
     });
 
     // Authentication Route

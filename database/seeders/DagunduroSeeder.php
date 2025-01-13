@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Attendant;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Department;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\EventType;
@@ -183,6 +184,45 @@ class DagunduroSeeder extends Seeder
             ],
         ];
 
+        $departments = [
+            [
+                'name' => 'Choir',
+                'slug' => 'choir',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Media',
+                'slug' => 'media',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'African Mandate',
+                'slug' => 'african_mandate',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Bible Study',
+                'slug' => 'bible_study',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Harvest Point School Of Ministries',
+                'slug' => 'harvest_point_school_of_ministries',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Other Ministries',
+                'slug' => 'other_ministries',
+                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'is_active' => 'Active'
+            ],
+        ];
+
 
         dump("Running event category seeder");
         foreach ($eventCategories as $eventCategory) {
@@ -338,5 +378,19 @@ class DagunduroSeeder extends Seeder
             }
         }
         dump("Members seeder ran successfully");
+
+        dump("Running departments seeder");
+        foreach ($departments as $department) {
+            $newDepartment = Department::where('name', '=', $department['name'])->first();
+            if ($newDepartment === null) {
+                $newDepartment = Department::create([
+                    'name'          => $department['name'],
+                    'slug'          => $department['slug'],
+                    'content'          => $department['content'],
+                    'is_active'          => $department['is_active']
+                ]);
+            }
+        }
+        dump("Departments table seeder ran successfully");
     }
 }
