@@ -14,6 +14,6 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.jkp.mje.mybluehost.me
-          username: developer@dagunduro-api.sbscuk.co.uk
-          password: ${{ secrets.password }}
+          server: ftp.harvestpointministries.org
+          username: dagunduro-api@harvestpointministries.org
+          password: ${{ secrets.prod_password }}

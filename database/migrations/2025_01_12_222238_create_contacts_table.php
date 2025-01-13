@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('department_id')->nullable();
             $table->string('full_name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
-            $table->string('home_address')->nullable();
-            $table->string('occupation')->nullable();
+            $table->string('subject')->nullable();
             $table->longText('message')->nullable();
-            $table->string('status')->default('Active')->comment('Active, Inactive');
-            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('contacts');
     }
 };
