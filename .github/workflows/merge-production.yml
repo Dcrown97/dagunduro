@@ -14,6 +14,6 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.harvestpointministries.org
+          server: 160.153.72.201
           username: dagunduro-api@harvestpointministries.org
           password: ${{ secrets.prod_password }}
