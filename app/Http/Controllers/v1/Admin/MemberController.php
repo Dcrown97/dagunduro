@@ -15,6 +15,7 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $status = $request->status;
+        $department_id = $request->department_id;
         $searchParam = $request->search_param;
 
         $currentUserInstance = UserMgtHelper::userInstance();
@@ -26,7 +27,9 @@ class MemberController extends Controller
             })
                 ->when($status, function ($query) use ($status) {
                     return $query->where('status', $status);
-                });
+                })->when($department_id, function ($query) use ($department_id) {
+                    return $query->where('department_id', $department_id);
+                })->with('departments:id,name');
 
             if ($request->export == true) {
                 $records = $records->orderBy('created_at', 'desc')->get();

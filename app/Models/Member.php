@@ -10,4 +10,9 @@ class Member extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = ["id"];
+
+    public function departments()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
 }

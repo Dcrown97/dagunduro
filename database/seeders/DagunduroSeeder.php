@@ -186,39 +186,69 @@ class DagunduroSeeder extends Seeder
 
         $departments = [
             [
-                'name' => 'Choir',
-                'slug' => 'choir',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Music Department',
+                'slug' => 'music_department',
+                'content' => 'The Music Department at Harvest Point Ministry stands out as a bilingual choir, skillfully ministering in both Yoruba and English to connect with our diverse congregation. Led by Elder Ebenezer Adenipekun, with the support of Deputy Evangelist Yemisi Kolawole, the department is committed to uplifting worship through music. The team is further strengthened by Mrs. Abimbola Ajayi (Secretary), Mrs. Grace Idowu (Treasurer), and Mrs. Ajoke Amara (Finance Secretary).',
                 'is_active' => 'Active'
             ],
             [
-                'name' => 'Media',
-                'slug' => 'media',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Ushering Department',
+                'slug' => 'ushering_department',
+                'content' => 'The Ushering Department serves as the first point of contact for visitors and members alike. Trained to warmly welcome and assist attendees, they ensure a seamless and organized worship experience. This department is led by Mrs. Hannah Olaribigbe, with Ms. Laide Pearse as Deputy, Mrs. Caroline Adedipe as Secretary, and a dedicated team of financial secretaries and treasurers.',
                 'is_active' => 'Active'
             ],
             [
-                'name' => 'African Mandate',
-                'slug' => 'african_mandate',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Sanctuary Keepers Department',
+                'slug' => 'sanctuary_keepers_department',
+                'content' => 'Responsible for maintaining the cleanliness and sanctity of our worship center, the Sanctuary Keepers Department is led by Deacon Devon Ojo, supported by Deaconess Badero and Secretary Deaconess Ruth Adenipekun. Their diligent work ensures a serene and welcoming environment for worship.',
                 'is_active' => 'Active'
             ],
             [
-                'name' => 'Bible Study',
-                'slug' => 'bible_study',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Protocol Department',
+                'slug' => 'protocol_department',
+                'content' => 'The Protocol Department oversees the coordination and organization of church activities and events. Minister Adekemi Adenosis heads this department, with Prophet Seun Ajayi as Secretary and Mr. Babatunde Adeyemi as Deputy.',
                 'is_active' => 'Active'
             ],
             [
-                'name' => 'Harvest Point School Of Ministries',
-                'slug' => 'harvest_point_school_of_ministries',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Men Fellowship',
+                'slug' => 'Men_fellowship',
+                'content' => 'The Men Fellowship is dedicated to nurturing the spiritual growth and leadership of men within the church. Through tailored teachings and discussions, the fellowship addresses the unique roles and responsibilities of fathers and husbands. Elder Samuel Iletoogun leads the team, supported by Deputy Mr. Kehinde Odukoya, Secretary Mr. Niyi Ojikutu, and Treasurer Mr. Adewale Akinde.',
                 'is_active' => 'Active'
             ],
             [
-                'name' => 'Other Ministries',
-                'slug' => 'other_ministries',
-                'content' => 'Site existing fruit identify parking diarize journey back could. Reach hammer lean any across place. Mifflin goto caught lot ladder responsible with too place circle. Downloaded culture streamline should existing should. Usabiltiy zoom so read while problem stands shift accountable regroup. Stand on viral technologically eager domains requirements. Intersection note who is not reality hop weeks interim board. Comes strategies focus light support more half submit hear able.',
+                'name' => 'Women Fellowship',
+                'slug' => 'women_fellowship',
+                'content' => 'The Women Fellowship, led by Evangelist Clara Aderemi Odeneye and Deputy Evangelist Nancy Akiitan, empowers women through spiritual growth and community support. The team includes Mrs. Caroline Adedipe (Secretary), Mr. Ayo Odukoya (Finance Secretary), and Mrs. Hannah Olaribigbe (Treasurer). Sub-units within the fellowship focus on grassroots outreach, addressing issues that impact women’s welfare.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Security Department',
+                'slug' => 'security_department',
+                'content' => 'Ensuring the safety and security of our worship environment is the primary responsibility of the Security Department. Headed by Mr. Adeniyi Adewunmi, with Elder Solomon Adebayo as Deputy, the team includes Mr. John Alofe, Mr. Adewale Akide, Captain Lawal, and Mrs. Ajoke Abi. They oversee the security of the premises, vehicles, and worship center.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Scripture Reading Department',
+                'slug' => 'scripture_reading_department',
+                'content' => 'This department, comprised of lay-readers, is responsible for the thoughtful and impactful reading of scriptures during services. Their ministry ensures the Word of God is shared with clarity and reverence.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Children’s DepartmentChildren’s Department',
+                'slug' => 'children’s_department',
+                'content' => 'Dedicated to nurturing the spiritual growth of our youngest members, the Children’s Department is led by Evangelist Lara Adewunmi. She is supported by Mrs. Mary Thomas, Minister Darji, Mrs. Akinde, Mrs. Adesola Odukoya, and Mrs. Odun Omolesho. Together, they create a vibrant and engaging environment for children to learn and grow in faith.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Youth Department',
+                'slug' => 'youth_department',
+                'content' => 'The Youth Department, under the leadership of Deacon Joel Faremi, focuses on empowering young people to grow in their faith and become active contributors to the church and society.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Media Department',
+                'slug' => 'media_department',
+                'content' => 'The Media Department plays a vital role in amplifying the ministry’s message through various digital and traditional platforms. Headed by Deacon Olawale Ajayi, with Deacon Joel Faremi as Deputy, the team includes Mr. Abayomi Tafa, Ms. Koyinsola, Deaconess Ruth Adenipekun, and Miss Caroline Awe. Their efforts ensure that the gospel reaches a wider audience and that church activities are well-documented and shared.',
                 'is_active' => 'Active'
             ],
         ];
