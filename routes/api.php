@@ -87,7 +87,7 @@ Route::group(["prefix" => "v1"], function () {
 
         // Contact open routes
         Route::group(['prefix' => 'contact'], function () {
-            Route::post('/create', [GeneralController::class, 'contact']);
+            Route::post('/create/mess/', [GeneralController::class, 'contact']);
         });
 
         // Departments open routes
