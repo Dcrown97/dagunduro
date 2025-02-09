@@ -251,6 +251,18 @@ class DagunduroSeeder extends Seeder
                 'content' => 'The Media Department plays a vital role in amplifying the ministry’s message through various digital and traditional platforms. Headed by Deacon Olawale Ajayi, with Deacon Joel Faremi as Deputy, the team includes Mr. Abayomi Tafa, Ms. Koyinsola, Deaconess Ruth Adenipekun, and Miss Caroline Awe. Their efforts ensure that the gospel reaches a wider audience and that church activities are well-documented and shared.',
                 'is_active' => 'Active'
             ],
+            [
+                'name' => 'African Mandate',
+                'slug' => 'african_mandate',
+                'content' => 'African Mandate, a dedicated department under Harvest French Ministry, was divinely inspired with a clear mission: to reach African nations and, more broadly, third-world countries, with comprehensive Bible curriculum in their native languages. From Yoruba, Zulu, and Swahili to French, Portuguese, and beyond, our goal is to bring Bible college training materials to the grassroots level. By equipping local pastors with these resources, we aim to foster discipleship and transform believers into committed disciples of Christ.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Prayer Ministry',
+                'slug' => 'prayer_ministry',
+                'content' => 'The Dagunduro Prayer Ministry is a vibrant arm of Harvest Point Ministries, dedicated to fostering spiritual revival and hosting special prayer meetings conducted primarily in the Yoruba language. Rooted in the word of God but takes advantage of the  rich linguisticl heritage of the Yoruba people, this ministry provides a unique platform and altar  for worship, prayer, and fellowship, allowing individuals to connect with God in their native tongue.',
+                'is_active' => 'Active'
+            ],
         ];
 
 
