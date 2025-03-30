@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Messages;
 use App\Models\Attendant;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Comment;
+use App\Models\Contact;
+use App\Models\Department;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\EventType;
@@ -18,9 +21,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class GeneralController extends Controller
 {
+    // This is general controller in the general folder
     // Events
     public function eventTypes()
     {
@@ -57,9 +62,10 @@ class GeneralController extends Controller
 
         try {
 
-            $records = Event::when($searchParam, function ($query) use ($searchParam) {
-                return $query->where('title', 'like', '%' . $searchParam . '%');
-            })
+            $records = Event::where('status', 'Published')
+                ->when($searchParam, function ($query) use ($searchParam) {
+                    return $query->where('title', 'like', '%' . $searchParam . '%');
+                })
                 ->when($category, function ($query) use ($category) {
                     return $query->where('event_category_id', $category);
                 })
@@ -462,6 +468,7 @@ class GeneralController extends Controller
             }
 
             $createRecord = Member::create([
+                'department_id' => $request->department_id,
                 'full_name' => $request->full_name,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
@@ -476,6 +483,80 @@ class GeneralController extends Controller
             DB::rollBack();
             return JsonResponser::send(true, $th->getMessage(), [], 500);
         }
+    }
+
+    // Departments
+    public function departments()
+    {
+        try {
+            $reocrd = Department::orderBy(
+                'created_at',
+                'desc'
+            )->get();
+            if ($reocrd->isEmpty()) {
+                return JsonResponser::send(
+                    true,
+                    'Record Not Found',
+                    null,
+                    404
+                );
+            }
+            return JsonResponser::send(false, 'Record found! successfully', $reocrd, 200);
+        } catch (\Throwable $e) {
+            return JsonResponser::send(true, $e->getMessage(), null, 500);
+        }
+    }
+
+    public function test () {
+        return "Hello World";
+    }
+
+    // Contact
+    public function contact(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $validateRequest = $this->validateContact($request);
+
+            if ($validateRequest->fails()) {
+                return JsonResponser::send(true, $validateRequest->errors()->first(), $validateRequest->errors()->all(), 400);
+            }
+
+            $contact = Contact::create([
+                'full_name' => $request->full_name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'subject' => $request->subject,
+                'message' => $request->message
+            ]);
+            DB::commit();
+
+            try {
+                Mail::to($request->email)->send(new Messages($contact));
+            } catch (\Exception $e) {
+                return JsonResponser::send(true, $e->getMessage(), [], 500);
+            }
+
+            return JsonResponser::send(false, "Message sent successfully", $contact, 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return JsonResponser::send(true, $th->getMessage(), [], 500);
+        }
+    }
+
+    private function validateContact($request)
+    {
+        $rules = [
+            'full_name' => 'required',
+            'email' => 'required',
+            'phone_number' => 'required',
+            'subject' => 'required',
+            'message' => 'required',
+        ];
+
+        $validate = Validator::make($request->all(), $rules);
+        return $validate;
     }
 
     private function validateMemberRequest($request)

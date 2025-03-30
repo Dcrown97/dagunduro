@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Attendant;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Department;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\EventType;
@@ -183,6 +184,87 @@ class DagunduroSeeder extends Seeder
             ],
         ];
 
+        $departments = [
+            [
+                'name' => 'Music Department',
+                'slug' => 'music_department',
+                'content' => 'The Music Department at Harvest Point Ministry stands out as a bilingual choir, skillfully ministering in both Yoruba and English to connect with our diverse congregation. Led by Elder Ebenezer Adenipekun, with the support of Deputy Evangelist Yemisi Kolawole, the department is committed to uplifting worship through music. The team is further strengthened by Mrs. Abimbola Ajayi (Secretary), Mrs. Grace Idowu (Treasurer), and Mrs. Ajoke Amara (Finance Secretary).',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Ushering Department',
+                'slug' => 'ushering_department',
+                'content' => 'The Ushering Department serves as the first point of contact for visitors and members alike. Trained to warmly welcome and assist attendees, they ensure a seamless and organized worship experience. This department is led by Mrs. Hannah Olaribigbe, with Ms. Laide Pearse as Deputy, Mrs. Caroline Adedipe as Secretary, and a dedicated team of financial secretaries and treasurers.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Sanctuary Keepers Department',
+                'slug' => 'sanctuary_keepers_department',
+                'content' => 'Responsible for maintaining the cleanliness and sanctity of our worship center, the Sanctuary Keepers Department is led by Deacon Devon Ojo, supported by Deaconess Badero and Secretary Deaconess Ruth Adenipekun. Their diligent work ensures a serene and welcoming environment for worship.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Protocol Department',
+                'slug' => 'protocol_department',
+                'content' => 'The Protocol Department oversees the coordination and organization of church activities and events. Minister Adekemi Adenosis heads this department, with Prophet Seun Ajayi as Secretary and Mr. Babatunde Adeyemi as Deputy.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Men Fellowship',
+                'slug' => 'Men_fellowship',
+                'content' => 'The Men Fellowship is dedicated to nurturing the spiritual growth and leadership of men within the church. Through tailored teachings and discussions, the fellowship addresses the unique roles and responsibilities of fathers and husbands. Elder Samuel Iletoogun leads the team, supported by Deputy Mr. Kehinde Odukoya, Secretary Mr. Niyi Ojikutu, and Treasurer Mr. Adewale Akinde.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Women Fellowship',
+                'slug' => 'women_fellowship',
+                'content' => 'The Women Fellowship, led by Evangelist Clara Aderemi Odeneye and Deputy Evangelist Nancy Akiitan, empowers women through spiritual growth and community support. The team includes Mrs. Caroline Adedipe (Secretary), Mr. Ayo Odukoya (Finance Secretary), and Mrs. Hannah Olaribigbe (Treasurer). Sub-units within the fellowship focus on grassroots outreach, addressing issues that impact women’s welfare.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Security Department',
+                'slug' => 'security_department',
+                'content' => 'Ensuring the safety and security of our worship environment is the primary responsibility of the Security Department. Headed by Mr. Adeniyi Adewunmi, with Elder Solomon Adebayo as Deputy, the team includes Mr. John Alofe, Mr. Adewale Akide, Captain Lawal, and Mrs. Ajoke Abi. They oversee the security of the premises, vehicles, and worship center.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Scripture Reading Department',
+                'slug' => 'scripture_reading_department',
+                'content' => 'This department, comprised of lay-readers, is responsible for the thoughtful and impactful reading of scriptures during services. Their ministry ensures the Word of God is shared with clarity and reverence.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Children’s DepartmentChildren’s Department',
+                'slug' => 'children’s_department',
+                'content' => 'Dedicated to nurturing the spiritual growth of our youngest members, the Children’s Department is led by Evangelist Lara Adewunmi. She is supported by Mrs. Mary Thomas, Minister Darji, Mrs. Akinde, Mrs. Adesola Odukoya, and Mrs. Odun Omolesho. Together, they create a vibrant and engaging environment for children to learn and grow in faith.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Youth Department',
+                'slug' => 'youth_department',
+                'content' => 'The Youth Department, under the leadership of Deacon Joel Faremi, focuses on empowering young people to grow in their faith and become active contributors to the church and society.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Media Department',
+                'slug' => 'media_department',
+                'content' => 'The Media Department plays a vital role in amplifying the ministry’s message through various digital and traditional platforms. Headed by Deacon Olawale Ajayi, with Deacon Joel Faremi as Deputy, the team includes Mr. Abayomi Tafa, Ms. Koyinsola, Deaconess Ruth Adenipekun, and Miss Caroline Awe. Their efforts ensure that the gospel reaches a wider audience and that church activities are well-documented and shared.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'African Mandate',
+                'slug' => 'african_mandate',
+                'content' => 'African Mandate, a dedicated department under Harvest French Ministry, was divinely inspired with a clear mission: to reach African nations and, more broadly, third-world countries, with comprehensive Bible curriculum in their native languages. From Yoruba, Zulu, and Swahili to French, Portuguese, and beyond, our goal is to bring Bible college training materials to the grassroots level. By equipping local pastors with these resources, we aim to foster discipleship and transform believers into committed disciples of Christ.',
+                'is_active' => 'Active'
+            ],
+            [
+                'name' => 'Prayer Ministry',
+                'slug' => 'prayer_ministry',
+                'content' => 'The Dagunduro Prayer Ministry is a vibrant arm of Harvest Point Ministries, dedicated to fostering spiritual revival and hosting special prayer meetings conducted primarily in the Yoruba language. Rooted in the word of God but takes advantage of the  rich linguisticl heritage of the Yoruba people, this ministry provides a unique platform and altar  for worship, prayer, and fellowship, allowing individuals to connect with God in their native tongue.',
+                'is_active' => 'Active'
+            ],
+        ];
+
 
         dump("Running event category seeder");
         foreach ($eventCategories as $eventCategory) {
@@ -338,5 +420,19 @@ class DagunduroSeeder extends Seeder
             }
         }
         dump("Members seeder ran successfully");
+
+        dump("Running departments seeder");
+        foreach ($departments as $department) {
+            $newDepartment = Department::where('name', '=', $department['name'])->first();
+            if ($newDepartment === null) {
+                $newDepartment = Department::create([
+                    'name'          => $department['name'],
+                    'slug'          => $department['slug'],
+                    'content'          => $department['content'],
+                    'is_active'          => $department['is_active']
+                ]);
+            }
+        }
+        dump("Departments table seeder ran successfully");
     }
 }
