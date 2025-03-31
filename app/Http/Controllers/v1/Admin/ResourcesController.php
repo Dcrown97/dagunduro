@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1\Admin;
 
 use App\Exports\ResourcesExport;
+use App\Helpers\FileUploadHelper;
 use App\Helpers\ProcessAuditLog;
 use App\Helpers\UserMgtHelper;
 use App\Http\Controllers\Controller;
@@ -57,42 +58,47 @@ class ResourcesController extends Controller
             $currentUserInstance = UserMgtHelper::userInstance();
             $currentUserInstanceId = $currentUserInstance->id;
 
+            $backgroundImageUrl = FileUploadHelper::singleBinaryFileUpload($request->background_image, "Resources");
+            $resourceFileUrl = FileUploadHelper::singleBinaryFileUpload($request->resource_file, "Resources");
+
             // Handle background image upload
-            if ($request->hasFile('background_image')) {
-                $file = $request->file('background_image');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $backgroundFilePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
+            // if ($request->hasFile('background_image')) {
+            //     $file = $request->file('background_image');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $backgroundFilePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $backgroundFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $backgroundFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($backgroundFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
-            }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($backgroundFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
+            // }
 
             // Handle file upload
-            if ($request->hasFile('resource_file')) {
-                $file = $request->file('resource_file');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $filePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
+            // if ($request->hasFile('resource_file')) {
+            //     $file = $request->file('resource_file');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $filePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $fileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $fileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($fileExtension, ['pdf', 'mp3', 'mp4'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PDF, MP3, or MP4 files are allowed.", [], 400);
-                }
-            }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($fileExtension, ['pdf', 'mp3', 'mp4'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PDF, MP3, or MP4 files are allowed.", [], 400);
+            //     }
+            // }
 
             $createRecord = Resource::create([
                 'user_id' => $currentUserInstanceId,
                 'resource_category_id' => $request->resource_category_id,
                 'title' => $request->title,
-                'resource_file' => $filePath ?? null, // Store file path
-                'background_image' => $backgroundFilePath ?? null, // Store file path
+                // 'resource_file' => $filePath ?? null, // Store file path
+                // 'background_image' => $backgroundFilePath ?? null, // Store file path
+                'resource_file' => $resourceFileUrl,
+                'background_image' => $backgroundImageUrl,
                 'author' => $request->author,
                 'file_type' => $fileExtension ?? null, // Save the file extension (pdf, mp3, mp4)
                 'resource_type' => $request->resource_type,
@@ -155,60 +161,76 @@ class ResourcesController extends Controller
                 return JsonResponser::send(true, "Resource not found", [], 400);
             }
 
-            // Handle background image upload
-            if ($request->hasFile('background_image')) {
-
-                // Remove the previous background image if it exists
-                if (!is_null($resourcesExist->background_image) && Storage::disk('public')->exists($resourcesExist->background_image)) {
-                    Storage::disk('public')->delete($resourcesExist->background_image);
-                }
-
-                $file = $request->file('background_image');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $backgroundFilePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
-
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $backgroundFileExtension = strtolower($file->getClientOriginalExtension());
-
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($backgroundFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
-
-                // Update the resource with the new file
-                $resourcesExist->background_image = $backgroundFilePath;
+            $backgroundImageURl = $resourcesExist->background_image;
+            if (isset($request->background_image)) {
+                $backgroundImage = $request->background_image;
+                $imageKey = 'Resources';
+                $backgroundImageURl = FileUploadHelper::singleBinaryFileUpload($backgroundImage, $imageKey);
             }
+
+            $resourceUrl = $resourcesExist->resource_file;
+            if (isset($request->resource_file)) {
+                $resource = $request->resource_file;
+                $resourceKey = 'Resources';
+                $resourceUrl = FileUploadHelper::singleBinaryFileUpload($resource, $resourceKey);
+            }
+
+            // Handle background image upload
+            // if ($request->hasFile('background_image')) {
+
+            //     // Remove the previous background image if it exists
+            //     if (!is_null($resourcesExist->background_image) && Storage::disk('public')->exists($resourcesExist->background_image)) {
+            //         Storage::disk('public')->delete($resourcesExist->background_image);
+            //     }
+
+            //     $file = $request->file('background_image');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $backgroundFilePath = $file->storeAs('resources', $fileName, 'public'); // Save file to the public disk
+
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $backgroundFileExtension = strtolower($file->getClientOriginalExtension());
+
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($backgroundFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
+
+            //     // Update the resource with the new file
+            //     $resourcesExist->background_image = $backgroundFilePath;
+            // }
 
             // Handle file upload
-            if ($request->hasFile('resource_file')) {
+            // if ($request->hasFile('resource_file')) {
 
-                // Remove the previous resource file if it exists
-                if (!is_null($resourcesExist->resource_file) && Storage::disk('public')->exists($resourcesExist->resource_file)) {
-                    Storage::disk('public')->delete($resourcesExist->resource_file);
-                }
+            //     // Remove the previous resource file if it exists
+            //     if (!is_null($resourcesExist->resource_file) && Storage::disk('public')->exists($resourcesExist->resource_file)) {
+            //         Storage::disk('public')->delete($resourcesExist->resource_file);
+            //     }
 
-                $file = $request->file('resource_file');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file
-                $filePath = $file->storeAs('resources', $fileName, 'public'); // Save file to public storage
+            //     $file = $request->file('resource_file');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file
+            //     $filePath = $file->storeAs('resources', $fileName, 'public'); // Save file to public storage
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $fileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $fileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate file type
-                if (!in_array($fileExtension, ['pdf', 'mp3', 'mp4'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PDF, MP3, or MP4 files are allowed.", [], 400);
-                }
+            //     // Validate file type
+            //     if (!in_array($fileExtension, ['pdf', 'mp3', 'mp4'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PDF, MP3, or MP4 files are allowed.", [], 400);
+            //     }
 
-                // Update the resource with the new file
-                $resourcesExist->resource_file = $filePath;
-                $resourcesExist->file_type = $fileExtension;
-            }
+            //     // Update the resource with the new file
+            //     $resourcesExist->resource_file = $filePath;
+            //     $resourcesExist->file_type = $fileExtension;
+            // }
 
             // Update other fields
             $resourcesExist->resource_category_id = $request->resource_category_id;
             $resourcesExist->title = $request->title;
             $resourcesExist->author = $request->author;
             $resourcesExist->resource_type = $request->resource_type;
+            $resourcesExist->backgroundImageURl = $backgroundImageURl;
+            $resourcesExist->resourceUrl = $resourceUrl;
             $resourcesExist->status = $request->status;
 
             // Save the updated resource
@@ -226,7 +248,7 @@ class ResourcesController extends Controller
             ProcessAuditLog::storeAuditLog($dataToLog);
 
             DB::commit();
-            
+
             // Check if resource exists
             $resourcesExist = Resource::find($request->id);
 

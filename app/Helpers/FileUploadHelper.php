@@ -68,7 +68,7 @@ class FileUploadHelper
     //     $fileUrl = $fileName;
 
     //     return $fileUrl;
-       
+
     // }
 
     public static function singleStringFileUpload($requestFile, $fileKey)
@@ -151,11 +151,54 @@ class FileUploadHelper
                 $fileName = $file->storeOnCloudinaryAs($fileKey, $tmpFilePath)->getSecurePath();
 
                 $fileUrl = $fileName;
-
             }
         }
 
         return $fileUrl;
-       
+    }
+
+    public static function uploadVideo($requestFile, $fileKey)
+    {
+        $videoUrl = "";
+
+        if (isset($requestFile)) {
+            $file = $requestFile;
+
+            $uniqueId = rand(10, 100000);
+            $name = $uniqueId . '_' . date("Y-m-d") . '_' . time();
+
+            // Upload video to Cloudinary
+            $uploadedFile = Cloudinary::uploadVideo($file->getRealPath(), [
+                'folder' => $fileKey,
+                'public_id' => $name
+            ]);
+
+            $videoUrl = $uploadedFile->getSecurePath();
+        }
+
+        return $videoUrl;
+    }
+
+    public static function uploadBase64Video($base64File, $fileKey)
+    {
+        $fileData = base64_decode(preg_replace('#^data:video/\w+;base64,#i', '', $base64File));
+
+        if ($fileData === false) {
+            throw new \Exception('Invalid base64 string.');
+        }
+
+        $uniqueId = uniqid();
+        $tmpFilePath = sys_get_temp_dir() . '/' . $uniqueId . '_' . date("Y-m-d") . time() . '.mp4';
+
+        file_put_contents($tmpFilePath, $fileData);
+
+        $uploadedFile = Cloudinary::uploadVideo($tmpFilePath, [
+            'folder' => $fileKey,
+            'public_id' => $uniqueId
+        ]);
+
+        unlink($tmpFilePath);
+
+        return $uploadedFile->getSecurePath();
     }
 }

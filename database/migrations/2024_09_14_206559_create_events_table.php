@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('start_date_time')->nullable();
             $table->string('end_date_time')->nullable();
             $table->longText('banner')->nullable();
+            $table->mediumText('video')->nullable();
             $table->longText('description')->nullable();
             $table->string('recurring')->nullable()->comment('true, false');
             $table->string('status')->nullable()->comment('Published, Concluded, Cancelled');
