@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1\Admin;
 
 use App\Exports\EventExport;
 use App\Exports\RegistrantExport;
+use App\Helpers\FileUploadHelper;
 use App\Helpers\ProcessAuditLog;
 use App\Helpers\UserMgtHelper;
 use App\Http\Controllers\Controller;
@@ -73,20 +74,27 @@ class EventController extends Controller
             $currentUserInstance = UserMgtHelper::userInstance();
             $currentUserInstanceId = $currentUserInstance->id;
 
+            $request->validate([
+                'video' => 'required|mimes:mp4,mp3,avi,mov,wmv|max:102400', // Max 100MB
+            ]);
+
+            $bannerUrl = FileUploadHelper::singleBinaryFileUpload($request->banner, "Events");
+            $videoUrl = FileUploadHelper::uploadVideo($request->video, "Events");
+
             // Handle background image upload
-            if ($request->hasFile('banner')) {
-                $file = $request->file('banner');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $bannerFilePath = $file->storeAs('events', $fileName, 'public'); // Save file to the public disk
+            // if ($request->hasFile('banner')) {
+            //     $file = $request->file('banner');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $bannerFilePath = $file->storeAs('events', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $bannerFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $bannerFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($bannerFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
-            }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($bannerFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
+            // }
 
             $createRecord = Event::create([
                 'user_id' => $currentUserInstanceId,
@@ -98,7 +106,9 @@ class EventController extends Controller
                 'end_date' => Carbon::parse($request->end_date),
                 'start_date_time' => $request->start_date_time,
                 'end_date_time' => $request->end_date_time,
-                'banner' => $bannerFilePath ?? null, //$bannerBase64,
+                // 'banner' => $bannerFilePath ?? null, //$bannerBase64,
+                'banner' => $bannerUrl,
+                'video' => $videoUrl,
                 'description' => $request->description,
                 'recurring' => $request->recurring,
                 'status' => $request->status //Published
@@ -170,35 +180,54 @@ class EventController extends Controller
             $currentUserInstance = UserMgtHelper::userInstance();
             $currentUserInstanceId = $currentUserInstance->id;
 
-            $eventExist = Event::where('id', $request->id)->first();
+            $request->validate([
+                'video' => 'required|mimes:mp4,avi,mov,wmv|max:102400', // Max 100MB
+            ]);
 
+            
+            $eventExist = Event::where('id', $request->id)->first();
+            
             if (is_null($eventExist)) {
                 return JsonResponser::send(true, "Event not found Exist", [], 400);
             }
+            
+            $bannerUrl = $eventExist->banner;
+            if (isset($request->banner)) {
+                $bannerImage = $request->banner;
+                $imageKey = 'Events';
+                $bannerUrl = FileUploadHelper::singleBinaryFileUpload($bannerImage, $imageKey);
+            }
+
+            $videoUrl = $eventExist->video;
+            if (isset($request->video)) {
+                $video = $request->video;
+                $videoKey = 'Events';
+                $videoUrl = FileUploadHelper::uploadVideo($video, $videoKey);
+            }
 
             // Handle background image upload
-            if ($request->hasFile('banner')) {
+            // if ($request->hasFile('banner')) {
 
-                // Remove the previous background image if it exists
-                if (!is_null($eventExist->banner) && Storage::disk('public')->exists($eventExist->banner)) {
-                    Storage::disk('public')->delete($eventExist->banner);
-                }
+            //     // Remove the previous background image if it exists
+            //     if (!is_null($eventExist->banner) && Storage::disk('public')->exists($eventExist->banner)) {
+            //         Storage::disk('public')->delete($eventExist->banner);
+            //     }
 
-                $file = $request->file('banner');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $bannerFilePath = $file->storeAs('events', $fileName, 'public'); // Save file to the public disk
+            //     $file = $request->file('banner');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $bannerFilePath = $file->storeAs('events', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $bannerFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $bannerFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($bannerFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($bannerFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
 
-                // Update the resource with the new file
-                $eventExist->banner = $bannerFilePath;
-            }
+            //     // Update the resource with the new file
+            //     $eventExist->banner = $bannerFilePath;
+            // }
 
             $eventExist->update([
                 'event_category_id' => $request->event_category_id,
@@ -210,6 +239,8 @@ class EventController extends Controller
                 'start_date_time' => $request->start_date_time,
                 'end_date_time' => $request->end_date_time,
                 'description' => $request->description,
+                'banner' => $bannerUrl,
+                'video' => $videoUrl,
                 'recurring' => $request->recurring,
                 'status' => $request->status //Published
             ]);
