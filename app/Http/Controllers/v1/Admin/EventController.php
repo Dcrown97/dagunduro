@@ -180,9 +180,9 @@ class EventController extends Controller
             $currentUserInstance = UserMgtHelper::userInstance();
             $currentUserInstanceId = $currentUserInstance->id;
 
-            $request->validate([
-                'video' => 'required|mimes:mp4,avi,mov,wmv|max:102400', // Max 100MB
-            ]);
+            // $request->validate([
+            //     'video' => 'required|mimes:mp4,avi,mov,wmv|max:102400', // Max 100MB
+            // ]);
 
             
             $eventExist = Event::where('id', $request->id)->first();
