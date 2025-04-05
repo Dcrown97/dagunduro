@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1\Admin;
 
 use App\Exports\BlogExport;
+use App\Helpers\FileUploadHelper;
 use App\Helpers\ProcessAuditLog;
 use App\Helpers\UserMgtHelper;
 use App\Http\Controllers\Controller;
@@ -82,34 +83,37 @@ class BlogController extends Controller
             $currentUserInstance = UserMgtHelper::userInstance();
             $currentUserInstanceId = $currentUserInstance->id;
 
+            $blogBannerUrl = FileUploadHelper::singleBinaryFileUpload($request->background_image, "Blog");
+            $authorImageUrl = FileUploadHelper::singleBinaryFileUpload($request->resource_file, "Blog");
+
             // Handle background image upload
-            if ($request->hasFile('blog_banner')) {
-                $file = $request->file('blog_banner');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $blogBannerFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
+            // if ($request->hasFile('blog_banner')) {
+            //     $file = $request->file('blog_banner');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $blogBannerFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $blogBannerFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $blogBannerFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($blogBannerFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
-            }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($blogBannerFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
+            // }
 
-            if ($request->hasFile('author_image')) {
-                $file = $request->file('author_image');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $authorImageFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
+            // if ($request->hasFile('author_image')) {
+            //     $file = $request->file('author_image');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $authorImageFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $authorImageFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $authorImageFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($authorImageFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
-            }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($authorImageFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
+            // }
 
             $createRecord = Blog::create([
                 'user_id' => $currentUserInstanceId,
@@ -118,6 +122,8 @@ class BlogController extends Controller
                 'author_name' => $request->author_name,
                 'blog_banner' => $blogBannerFilePath ?? null,
                 'author_image' => $authorImageFilePath ?? null,
+                'blog_banner' => $blogBannerUrl,
+                'author_image' => $authorImageUrl,
                 'description' => $request->description,
                 'show_author' => $request->show_author,
                 'allow_comments' => $request->allow_comments,
@@ -185,52 +191,66 @@ class BlogController extends Controller
                 return JsonResponser::send(true, "Blog does not found Exist", [], 400);
             }
 
+            $blogBannerUrl = $blogExist->blog_banner;
+            if (isset($request->blog_banner)) {
+                $blogBanner = $request->blog_banner;
+                $imageKey = 'Blog';
+                $blogBannerUrl = FileUploadHelper::singleBinaryFileUpload($blogBanner, $imageKey);
+            }
+
+            $authorImageUrl = $blogExist->author_image;
+            if (isset($request->author_image)) {
+                $authorImage = $request->author_image;
+                $resourceKey = 'Blog';
+                $authorImageUrl = FileUploadHelper::singleBinaryFileUpload($authorImage, $resourceKey);
+            }
+
             // Handle background image upload
-            if ($request->hasFile('blog_banner')) {
+            // if ($request->hasFile('blog_banner')) {
 
-                // Remove the previous background image if it exists
-                if (!is_null($blogExist->blog_banner) && Storage::disk('public')->exists($blogExist->blog_banner)) {
-                    Storage::disk('public')->delete($blogExist->blog_banner);
-                }
+            //     // Remove the previous background image if it exists
+            //     if (!is_null($blogExist->blog_banner) && Storage::disk('public')->exists($blogExist->blog_banner)) {
+            //         Storage::disk('public')->delete($blogExist->blog_banner);
+            //     }
 
-                $file = $request->file('blog_banner');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $blogBannerFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
+            //     $file = $request->file('blog_banner');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $blogBannerFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $blogBannerFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $blogBannerFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($blogBannerFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($blogBannerFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
 
-                // Update the resource with the new file
-                $blogExist->blog_banner = $blogBannerFilePath;
-            }
+            //     // Update the resource with the new file
+            //     $blogExist->blog_banner = $blogBannerFilePath;
+            // }
 
-            if ($request->hasFile('author_image')) {
+            // if ($request->hasFile('author_image')) {
 
-                // Remove the previous background image if it exists
-                if (!is_null($blogExist->author_image) && Storage::disk('public')->exists($blogExist->author_image)) {
-                    Storage::disk('public')->delete($blogExist->author_image);
-                }
+            //     // Remove the previous background image if it exists
+            //     if (!is_null($blogExist->author_image) && Storage::disk('public')->exists($blogExist->author_image)) {
+            //         Storage::disk('public')->delete($blogExist->author_image);
+            //     }
 
-                $file = $request->file('author_image');
-                $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
-                $authorImageFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
+            //     $file = $request->file('author_image');
+            //     $fileName = time() . '_' . $file->getClientOriginalName(); // Rename the file uniquely
+            //     $authorImageFilePath = $file->storeAs('blogs', $fileName, 'public'); // Save file to the public disk
 
-                // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
-                $authorImageFileExtension = strtolower($file->getClientOriginalExtension());
+            //     // Get the file extension (e.g., 'pdf', 'mp3', 'mp4')
+            //     $authorImageFileExtension = strtolower($file->getClientOriginalExtension());
 
-                // Validate the file type (pdf, mp3, mp4)
-                if (!in_array($authorImageFileExtension, ['png', 'jpg', 'jpeg'])) {
-                    return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
-                }
+            //     // Validate the file type (pdf, mp3, mp4)
+            //     if (!in_array($authorImageFileExtension, ['png', 'jpg', 'jpeg'])) {
+            //         return JsonResponser::send(true, "Invalid file type. Only PNG, JP, or JPEG files are allowed.", [], 400);
+            //     }
 
-                // Update the resource with the new file
-                $blogExist->author_image = $authorImageFilePath;
-            }
+            //     // Update the resource with the new file
+            //     $blogExist->author_image = $authorImageFilePath;
+            // }
 
             $blogExist->update([
                 'blog_category_id' => $request->blog_category_id,
@@ -238,6 +258,8 @@ class BlogController extends Controller
                 'author_name' => $request->author_name,
                 'description' => $request->description,
                 'show_author' => $request->show_author,
+                'blog_banner' => $blogBannerUrl,
+                'author_image' => $authorImageUrl,
                 'allow_comments' => $request->allow_comments,
                 'allow_share' => $request->allow_share,
                 'allow_likes' => $request->allow_likes,
